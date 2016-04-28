@@ -11,6 +11,10 @@
 
   <artifactId>camunda-externaltask-service</artifactId>
 
+  <properties>
+    <start-class>de.holisticon.bpm.cughh.externaltask.client.service.CamundaExternalTaskApplication</start-class>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.camunda.bpm.extension</groupId>
@@ -22,4 +26,19 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
