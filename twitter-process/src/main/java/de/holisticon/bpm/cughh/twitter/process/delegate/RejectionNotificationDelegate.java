@@ -1,4 +1,4 @@
-package de.holisticon.bpm.cughh;
+package de.holisticon.bpm.cughh.twitter.process.delegate;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

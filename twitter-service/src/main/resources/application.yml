@@ -1,0 +1,11 @@
+twitter4j:
+  debug: true
+  oauth:
+    consumerKey: OpKvNKjeva56GKMPXal91pWWA
+    consumerSecret: gA30wHK4Wj8Hb19HYJfmXZyPV72iNOtkwvI0PP2PomWa1Y0w1k
+    accessToken: 721647478622273536-Lx2hwpZ0I659IGGFwuUchTKZWJvZTXt
+    accessTokenSecret: 5j90MHmmrafo0tOP6iz38JHLmc4D0fqtkgDoJD8woOigM
+
+twitter.enabled: false
+
+

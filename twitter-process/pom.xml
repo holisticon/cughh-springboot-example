@@ -17,8 +17,9 @@
       <artifactId>camunda-engine</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.twitter4j</groupId>
-      <artifactId>twitter4j-core</artifactId>
+      <groupId>de.holisticon.bpm.cughh</groupId>
+      <artifactId>cughh-springboot-example-twitter-service</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 
