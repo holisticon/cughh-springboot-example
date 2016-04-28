@@ -1,9 +1,18 @@
-target/
-pom.xml.tag
-pom.xml.releaseBackup
+# ------------ Maven
 pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
+target/
+# ------------ Eclipse
+.classpath
+.project
+.settings/
+# ------------ Idea
+*.iml
+.idea
+# ------------ Misc
+.java-version
+*/src/main/resources/*.png
+*.bak
+*.index
+/docker
+tmp/
+~*
