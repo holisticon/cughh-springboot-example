@@ -16,11 +16,7 @@
       <groupId>org.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
     </dependency>
-    <dependency>
-      <groupId>de.holisticon.bpm.cughh</groupId>
-      <artifactId>cughh-springboot-example-twitter-service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>org.camunda.bpm.extension</groupId>
       <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
@@ -28,6 +24,18 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>de.holisticon.bpm.cughh</groupId>
+      <artifactId>cughh-springboot-example-twitter-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.holisticon.bpm.cughh</groupId>
+      <artifactId>cughh-springboot-example-twitter-rule</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

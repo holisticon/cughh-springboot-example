@@ -38,16 +38,19 @@ server:
   port: 8081
 ```
 
-## 4 prepare dmn (skip)
+## 4 use dmn ruletask
 
 * twitter-rule module
-** dependency spring-starter, camunda-engine
-** TwitterRuleConfiguration
-** AuthorApprovalService -> DecisionService 
+** dependency groovy-all
+* META-INF/processes.xml
 * twitter-process
-** extend process bpmn
+* extend process bpmn
+** ruleTask - dmn
+* include rule dependency in pom
 
 ## 5 use dmn
+
+
 
 
 

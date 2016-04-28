@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
-@Import(TwitterConfiguration.class)
+@Import({TwitterConfiguration.class})
 public class TwitterProcessApplication extends SpringBootProcessApplication {
 
   public static void main(String[] args) {

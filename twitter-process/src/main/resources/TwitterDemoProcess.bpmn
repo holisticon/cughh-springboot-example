@@ -97,7 +97,7 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[#{approvalStatus == 'REQUIRED'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="SequenceFlow_0mr80b2" sourceRef="BusinessRuleTask_080o732" targetRef="ExclusiveGateway_07ltsp5" />
-    <businessRuleTask id="BusinessRuleTask_080o732" name="Approve author " camunda:delegateExpression="${approveAuthorDelegate}">
+    <businessRuleTask id="BusinessRuleTask_080o732" name="Approve author " camunda:resultVariable="approvalStatus" camunda:decisionRef="TwitterDemoProcess_AuthorApproval" camunda:mapDecisionResult="singleEntry">
       <incoming>SequenceFlow_9</incoming>
       <outgoing>SequenceFlow_0mr80b2</outgoing>
     </businessRuleTask>
