@@ -2,12 +2,14 @@ package de.holisticon.bpm.cughh.twitter.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 @Configuration
+@ComponentScan
 public class TwitterConfiguration {
 
   @Value("${twitter4j.debug:false}")
