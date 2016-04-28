@@ -19,6 +19,8 @@
     <module>twitter-process</module>
     <module>twitter-service</module>
     <module>twitter-rule</module>
+    <module>camunda-externaltask-client</module>
+    <module>camunda-externaltask-service</module>
   </modules>
 
   <properties>
@@ -86,11 +88,13 @@
         <artifactId>hystrix-core</artifactId>
         <version>${hystrix.version}</version>
       </dependency>
+
       <dependency>
-        <groupId>com.netflix.hystrix</groupId>
-        <artifactId>hystrix-metrics-event-stream</artifactId>
-        <version>${hystrix.version}</version>
+        <groupId>de.holisticon.bpm.cughh</groupId>
+        <artifactId>camunda-externaltask-client</artifactId>
+        <version>${project.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.twitter4j</groupId>
         <artifactId>twitter4j-core</artifactId>

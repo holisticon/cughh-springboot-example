@@ -9,21 +9,19 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>cughh-springboot-example-twitter-service</artifactId>
+  <artifactId>camunda-externaltask-client</artifactId>
+
 
   <dependencies>
     <dependency>
-      <groupId>org.twitter4j</groupId>
-      <artifactId>twitter4j-core</artifactId>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>de.holisticon.bpm.cughh</groupId>
-      <artifactId>camunda-externaltask-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.netflix.hystrix</groupId>
-      <artifactId>hystrix-core</artifactId>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20160212</version>
     </dependency>
   </dependencies>
-
 </project>

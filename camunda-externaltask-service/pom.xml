@@ -9,20 +9,16 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>cughh-springboot-example-twitter-service</artifactId>
+  <artifactId>camunda-externaltask-service</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>org.twitter4j</groupId>
-      <artifactId>twitter4j-core</artifactId>
+      <groupId>org.camunda.bpm.extension</groupId>
+      <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
     </dependency>
     <dependency>
-      <groupId>de.holisticon.bpm.cughh</groupId>
-      <artifactId>camunda-externaltask-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.netflix.hystrix</groupId>
-      <artifactId>hystrix-core</artifactId>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
     </dependency>
   </dependencies>
 

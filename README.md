@@ -48,7 +48,7 @@ server:
 ** ruleTask - dmn
 * include rule dependency in pom
 
-## 5 prepare hytrix rule call
+## 5 prepare hystrix rule call
 
 ### twitter-rule
 
@@ -69,7 +69,7 @@ test via:
 
 http://localhost:8082/rest/engine/default/decision-definition/
 
-### twitter process
+## 6 twitter process calls via hystrix
 
 * remove dep twitter-rule
  
@@ -80,6 +80,30 @@ http://localhost:8082/rest/engine/default/decision-definition/
 
 dump mysql !
 
+show: 
+* jan.galinski@holisticon.de approved
+
+* server top: required
+
+# 7 prepare external task 
+
+* new module externaltask-client -> no component
+* new module externaltask-service -> camunda-spring-boot-rest application
+
+*twitter service*
+
+* dependency external-client, hystrix-core
+* prepare commands 
+
+*do*
+
+* start externaltask service
+
+http://localhost:8089/rest/engine/default/process-definition/
+
+# 8 use external task
+
+* process:
 
 
 
