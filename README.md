@@ -38,6 +38,16 @@ server:
   port: 8081
 ```
 
+## 4 prepare dmn (skip)
+
+* twitter-rule module
+** dependency spring-starter, camunda-engine
+** TwitterRuleConfiguration
+** AuthorApprovalService -> DecisionService 
+* twitter-process
+** extend process bpmn
+
+## 5 use dmn
 
 
 

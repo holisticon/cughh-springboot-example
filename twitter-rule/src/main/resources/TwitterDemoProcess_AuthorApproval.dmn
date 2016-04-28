@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn11.xsd" id="definitions" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="TwitterDemoProcess_AuthorApproval" name="Author Approval">
+    <decisionTable id="TwitterDemoProcess_AuthorApprovalTable" hitPolicy="FIRST">
+      <input id="input1" label="E-Mail Address">
+        <inputExpression id="inputExpression1" typeRef="string">        <text>email</text>
+</inputExpression>
+      </input>
+      <output id="output1" label="Approval Status" name="approvalStatus" typeRef="string" />
+      <rule id="rule1">
+        <description>Approve technical writers</description>
+        <inputEntry>        <text><![CDATA['jan.galinski@holisticon.de', 'simon.zambrovski@holisticon.de']]></text>
+</inputEntry>
+        <outputEntry>        <text><![CDATA['APPROVED']]></text>
+</outputEntry>
+      </rule>
+      <rule id="rule2">
+        <description>Approval required for other company empoyees</description>
+        <inputEntry expressionLanguage="groovy">        <text><![CDATA[email.endsWith('@holisticon.de')]]></text>
+</inputEntry>
+        <outputEntry>        <text>'REQUIRED'</text>
+</outputEntry>
+      </rule>
+      <rule id="rule3">
+        <description>Reject external contacts</description>
+        <inputEntry>        <text></text>
+</inputEntry>
+        <outputEntry>        <text><![CDATA['REJECTED']]></text>
+</outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

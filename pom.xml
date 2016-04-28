@@ -18,6 +18,7 @@
   <modules>
     <module>twitter-process</module>
     <module>twitter-service</module>
+    <module>twitter-rule</module>
   </modules>
 
   <properties>

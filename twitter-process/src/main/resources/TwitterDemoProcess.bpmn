@@ -7,11 +7,11 @@
           <camunda:property name="KPI-Ratio" value="Tweet Rejected" />
         </camunda:properties>
       </extensionElements>
-      <incoming>no</incoming>
+      <incoming>SequenceFlow_1weij24</incoming>
       <outgoing>SequenceFlow_4</outgoing>
     </serviceTask>
     <sequenceFlow id="SequenceFlow_4" name="" sourceRef="service_task_send_rejection_notification" targetRef="gateway_join" />
-    <exclusiveGateway id="gateway_approved" name="Approved?">
+    <exclusiveGateway id="gateway_approved" name="Approved?" default="no">
       <extensionElements>
         <camunda:properties>
           <camunda:property name="KPI-Cycle-End" value="Tweet Approval Time" />
@@ -21,21 +21,20 @@
       <outgoing>no</outgoing>
       <outgoing>yes</outgoing>
     </exclusiveGateway>
-    <sequenceFlow id="no" name="no	" sourceRef="gateway_approved" targetRef="service_task_send_rejection_notification">
+    <sequenceFlow id="no" name="no	" sourceRef="gateway_approved" targetRef="ExclusiveGateway_029yfdu">
       <extensionElements>
         <camunda:properties>
           <camunda:property name="probability" value="13" />
         </camunda:properties>
       </extensionElements>
-      <conditionExpression xsi:type="tFormalExpression" id="FormalExpression_1">#{!approved}</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="yes" name="yes" sourceRef="gateway_approved" targetRef="service_task_publish_on_twitter">
+    <sequenceFlow id="yes" name="yes" sourceRef="gateway_approved" targetRef="ExclusiveGateway_1wq69bo">
       <extensionElements>
         <camunda:properties>
           <camunda:property name="probability" value="87" />
         </camunda:properties>
       </extensionElements>
-      <conditionExpression xsi:type="tFormalExpression" id="FormalExpression_2">#{approved}</conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression">${approved}</conditionExpression>
     </sequenceFlow>
     <exclusiveGateway id="gateway_join" name="Join">
       <incoming>SequenceFlow_4</incoming>
@@ -49,7 +48,7 @@
           <camunda:property name="KPI-Ratio" value="Tweet Approved" />
         </camunda:properties>
       </extensionElements>
-      <incoming>yes</incoming>
+      <incoming>SequenceFlow_1qq9ik0</incoming>
       <outgoing>SequenceFlow_3</outgoing>
     </serviceTask>
     <sequenceFlow id="SequenceFlow_3" name="" sourceRef="service_task_publish_on_twitter" targetRef="gateway_join" />
@@ -64,7 +63,7 @@
       </extensionElements>
       <outgoing>SequenceFlow_9</outgoing>
     </startEvent>
-    <sequenceFlow id="SequenceFlow_9" name="" sourceRef="start_event_new_tweet" targetRef="user_task_review_tweet" />
+    <sequenceFlow id="SequenceFlow_9" name="" sourceRef="start_event_new_tweet" targetRef="BusinessRuleTask_080o732" />
     <userTask id="user_task_review_tweet" name="Review Tweet" camunda:formKey="embedded:app:forms/reviewTweet.html" camunda:assignee="demo">
       <extensionElements>
         <camunda:properties>
@@ -72,10 +71,42 @@
           <camunda:property name="durationSd" value="5000" />
         </camunda:properties>
       </extensionElements>
-      <incoming>SequenceFlow_9</incoming>
+      <incoming>SequenceFlow_1geypx8</incoming>
       <outgoing>SequenceFlow_2</outgoing>
     </userTask>
     <sequenceFlow id="SequenceFlow_2" name="" sourceRef="user_task_review_tweet" targetRef="gateway_approved" />
+    <exclusiveGateway id="ExclusiveGateway_029yfdu">
+      <incoming>no</incoming>
+      <incoming>SequenceFlow_1dbc1f3</incoming>
+      <outgoing>SequenceFlow_1weij24</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_1weij24" sourceRef="ExclusiveGateway_029yfdu" targetRef="service_task_send_rejection_notification" />
+    <exclusiveGateway id="ExclusiveGateway_1wq69bo">
+      <incoming>yes</incoming>
+      <incoming>SequenceFlow_02lfe5y</incoming>
+      <outgoing>SequenceFlow_1qq9ik0</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_1qq9ik0" sourceRef="ExclusiveGateway_1wq69bo" targetRef="service_task_publish_on_twitter" />
+    <exclusiveGateway id="ExclusiveGateway_07ltsp5" name="ApprovalStatus?">
+      <incoming>SequenceFlow_0mr80b2</incoming>
+      <outgoing>SequenceFlow_1geypx8</outgoing>
+      <outgoing>SequenceFlow_1dbc1f3</outgoing>
+      <outgoing>SequenceFlow_02lfe5y</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="SequenceFlow_1geypx8" name="required" sourceRef="ExclusiveGateway_07ltsp5" targetRef="user_task_review_tweet">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[#{approvalStatus == 'REQUIRED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_0mr80b2" sourceRef="BusinessRuleTask_080o732" targetRef="ExclusiveGateway_07ltsp5" />
+    <businessRuleTask id="BusinessRuleTask_080o732" name="Approve author " camunda:delegateExpression="${approveAuthorDelegate}">
+      <incoming>SequenceFlow_9</incoming>
+      <outgoing>SequenceFlow_0mr80b2</outgoing>
+    </businessRuleTask>
+    <sequenceFlow id="SequenceFlow_1dbc1f3" name="rejected" sourceRef="ExclusiveGateway_07ltsp5" targetRef="ExclusiveGateway_029yfdu">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[#{approvalStatus == 'REJECTED'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="SequenceFlow_02lfe5y" name="approved" sourceRef="ExclusiveGateway_07ltsp5" targetRef="ExclusiveGateway_1wq69bo">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[#{approvalStatus == 'APPROVED'}]]></conditionExpression>
+    </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_TwitterDemoProcess">
     <bpmndi:BPMNPlane id="BPMNPlane_TwitterDemoProcess" bpmnElement="TwitterDemoProcess">
@@ -86,83 +117,148 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_Review_Tweet_3" bpmnElement="user_task_review_tweet">
-        <omgdc:Bounds x="156" y="94" width="100" height="80" />
+        <omgdc:Bounds x="381" y="94" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_Approved__3" bpmnElement="gateway_approved" isMarkerVisible="true">
-        <omgdc:Bounds x="387" y="114" width="40" height="40" />
+        <omgdc:Bounds x="511" y="114" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="420" y="147" width="66" height="22" />
+          <omgdc:Bounds x="532" y="141" width="90" height="22" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_Publish_on_Twitter_3" bpmnElement="service_task_publish_on_twitter">
-        <omgdc:Bounds x="492" y="174" width="100" height="80" />
+        <omgdc:Bounds x="616" y="215" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_Send_rejection_notification_3" bpmnElement="service_task_send_rejection_notification">
-        <omgdc:Bounds x="492" y="24" width="100" height="80" />
+        <omgdc:Bounds x="616" y="-1" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_Exclusive_Databased_Gateway_3" bpmnElement="gateway_join" isMarkerVisible="true">
-        <omgdc:Bounds x="627" y="114" width="40" height="40" />
+        <omgdc:Bounds x="751" y="114" width="40" height="40" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="663" y="147" width="29" height="22" />
+          <omgdc:Bounds x="757" y="147" width="90" height="22" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_EndNoneEvent_3" bpmnElement="end_event_tweet_handled">
-        <omgdc:Bounds x="782" y="120" width="28" height="28" />
+        <omgdc:Bounds x="851" y="120" width="28" height="28" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="752" y="150" width="89" height="22" />
+          <omgdc:Bounds x="821" y="150" width="90" height="22" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_3" bpmnElement="SequenceFlow_3" sourceElement="BPMNShape_Publish_on_Twitter_3" targetElement="BPMNShape_Exclusive_Databased_Gateway_3">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="592" y="214" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="647" y="214" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="647" y="154" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="716" y="255" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="771" y="255" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="771" y="154" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="639" y="226" width="6" height="6" />
+          <omgdc:Bounds x="721" y="226" width="90" height="6" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_4" bpmnElement="SequenceFlow_4" sourceElement="BPMNShape_Send_rejection_notification_3" targetElement="BPMNShape_Exclusive_Databased_Gateway_3">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="592" y="64" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="647" y="64" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="647" y="114" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="716" y="39" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="771" y="39" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="771" y="114" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="872" y="102" width="6" height="6" />
+          <omgdc:Bounds x="954" y="102" width="90" height="6" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_5" bpmnElement="SequenceFlow_5" sourceElement="BPMNShape_Exclusive_Databased_Gateway_3" targetElement="BPMNShape_EndNoneEvent_3">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="667" y="134" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="782" y="134" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="791" y="134" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="851" y="134" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="722" y="127" width="6" height="6" />
+          <omgdc:Bounds x="804" y="127" width="90" height="6" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_no" bpmnElement="no" sourceElement="BPMNShape_Approved__3" targetElement="BPMNShape_Send_rejection_notification_3">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="407" y="114" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="407" y="64" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="492" y="64" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="531" y="114" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="531" y="64" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="407" y="72" width="30" height="22" />
+          <omgdc:Bounds x="522" y="98" width="90" height="22" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_yes" bpmnElement="yes" sourceElement="BPMNShape_Approved__3" targetElement="BPMNShape_Publish_on_Twitter_3">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="407" y="154" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="407" y="214" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="492" y="214" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="531" y="154" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="531" y="230" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="409" y="192" width="27" height="22" />
+          <omgdc:Bounds x="502" y="192" width="90" height="22" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_9" bpmnElement="SequenceFlow_9" sourceElement="BPMNShape_new_tweet_3" targetElement="BPMNShape_Review_Tweet_3">
         <omgdi:waypoint xsi:type="omgdc:Point" x="78" y="134" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="156" y="134" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="123" y="134" />
         <bpmndi:BPMNLabel>
           <omgdc:Bounds x="103" y="119" width="6" height="6" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="SequenceFlow_2" sourceElement="BPMNShape_Review_Tweet_3" targetElement="BPMNShape_Approved__3">
-        <omgdi:waypoint xsi:type="omgdc:Point" x="256" y="134" />
-        <omgdi:waypoint xsi:type="omgdc:Point" x="387" y="134" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="481" y="134" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="511" y="134" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="337" y="134" width="6" height="6" />
+          <omgdc:Bounds x="341" y="134" width="90" height="6" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_029yfdu_di" bpmnElement="ExclusiveGateway_029yfdu" isMarkerVisible="true">
+        <omgdc:Bounds x="506" y="14" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="486" y="64" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1weij24_di" bpmnElement="SequenceFlow_1weij24">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="556" y="39" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="586" y="39" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="586" y="39" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="616" y="39" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="552.5" y="54" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1wq69bo_di" bpmnElement="ExclusiveGateway_1wq69bo" isMarkerVisible="true">
+        <omgdc:Bounds x="506" y="230" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="486" y="280" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1qq9ik0_di" bpmnElement="SequenceFlow_1qq9ik0">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="556" y="255" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="616" y="255" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="541" y="245" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_07ltsp5_di" bpmnElement="ExclusiveGateway_07ltsp5" isMarkerVisible="true">
+        <omgdc:Bounds x="257" y="109" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="237" y="159" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1geypx8_di" bpmnElement="SequenceFlow_1geypx8">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="307" y="134" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="381" y="134" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="292" y="104" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0mr80b2_di" bpmnElement="SequenceFlow_0mr80b2">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="223" y="134" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="257" y="134" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="203" y="124" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BusinessRuleTask_080o732_di" bpmnElement="BusinessRuleTask_080o732">
+        <omgdc:Bounds x="123" y="94" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1dbc1f3_di" bpmnElement="SequenceFlow_1dbc1f3">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="282" y="109" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="282" y="39" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="506" y="39" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="285" y="47" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_02lfe5y_di" bpmnElement="SequenceFlow_02lfe5y">
+        <omgdi:waypoint xsi:type="omgdc:Point" x="282" y="159" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="282" y="255" />
+        <omgdi:waypoint xsi:type="omgdc:Point" x="506" y="255" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="273" y="227" width="90" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
