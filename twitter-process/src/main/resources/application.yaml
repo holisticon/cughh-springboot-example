@@ -15,3 +15,7 @@ spring.datasource:
 server:
   port: 8081
 
+
+approval.service.url: http://localhost:8082/rest/engine/default/decision-definition/key/TwitterDemoProcess_AuthorApproval/evaluate
+
+

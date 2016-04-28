@@ -48,7 +48,37 @@ server:
 ** ruleTask - dmn
 * include rule dependency in pom
 
-## 5 use dmn
+## 5 prepare hytrix rule call
+
+### twitter-rule
+
+* pom dependency - starter-rest and h2
+* becomes camunda spring rest application
+```
+  public static void main(String[] args) {
+    SpringApplication.run(TwitterRuleApplication.class, args);
+  }
+
+  @Bean
+  public ResourceConfig jerseyConfig() {
+    return new CamundaJerseyResourceConfig();
+  }
+```
+
+test via: 
+
+http://localhost:8082/rest/engine/default/decision-definition/
+
+### twitter process
+
+* remove dep twitter-rule
+ 
+* new delegate ApproveAuthorDelegate 
+* adjust bpmn
+* add dependency hystrix core
+* url in application.yaml
+
+dump mysql !
 
 
 

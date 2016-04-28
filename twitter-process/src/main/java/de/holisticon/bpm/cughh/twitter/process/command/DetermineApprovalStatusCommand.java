@@ -27,7 +27,7 @@ public class DetermineApprovalStatusCommand extends HystrixCommand<String> {
   private static final String DEFAULT_VALUE = "REQUIRED";
   private static final HystrixCommand.Setter SETTER = Setter
     .withGroupKey(HystrixCommandGroupKey.Factory.asKey("RestService"))
-    .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(100));
+    .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(1000));
 
   private final Logger logger = getLogger(this.getClass());
   private final RestTemplate rest = new RestTemplate();

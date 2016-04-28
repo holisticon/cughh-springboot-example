@@ -1,0 +1,4 @@
+server.port: 8082
+
+camunda.bpm:
+  metrics.enabled: false
