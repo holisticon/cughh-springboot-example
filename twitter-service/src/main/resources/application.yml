@@ -6,6 +6,8 @@ twitter4j:
     accessToken: 721647478622273536-Lx2hwpZ0I659IGGFwuUchTKZWJvZTXt
     accessTokenSecret: 5j90MHmmrafo0tOP6iz38JHLmc4D0fqtkgDoJD8woOigM
 
-twitter.enabled: false
+twitter:
+  enabled: false
+  worker.name: twitter-worker-1
 
-
+camunda.rest.base.url: http://localhost:8089/rest/engine/default

@@ -103,7 +103,27 @@ http://localhost:8089/rest/engine/default/process-definition/
 
 # 8 use external task
 
-* process:
+*process*
+
+* remove delegate
+* switch twitter service task to external 
+
+*twitter-service*
+
+* dependency spring-boot-starter
+* new TwitterServiceApplication
+
+```
+
+  @Value("${camunda.rest.base.url}")
+  private String baseUrl;
+
+  @Value("${twitter.worker.name}")
+  private String workerName;
+
+```
+
+
 
 
 

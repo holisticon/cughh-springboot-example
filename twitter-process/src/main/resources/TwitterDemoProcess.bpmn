@@ -42,7 +42,7 @@
       <outgoing>SequenceFlow_5</outgoing>
     </exclusiveGateway>
     <sequenceFlow id="SequenceFlow_5" name="" sourceRef="gateway_join" targetRef="end_event_tweet_handled" />
-    <serviceTask id="service_task_publish_on_twitter" name="Publish on Twitter" camunda:delegateExpression="#{tweetContentDelegate}">
+    <serviceTask id="service_task_publish_on_twitter" name="Publish on Twitter" camunda:type="external" camunda:topic="twitter">
       <extensionElements>
         <camunda:properties>
           <camunda:property name="KPI-Ratio" value="Tweet Approved" />
